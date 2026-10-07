@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>毛豆丸偵探社</title>
+<meta name="theme-color" content="#e8823c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<style>
+:root{--paper:#fff8ef; --ink:#3a2e2a; --line:#ead9bd; --muted:#7d6c5f}
+*{box-sizing:border-box}
+html,body{margin:0; height:100%; background:var(--paper); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; overscroll-behavior:none}
+body{display:flex; flex-direction:column; height:100dvh}
+.top{flex:none; display:flex; align-items:center; gap:10px; padding:calc(6px + env(safe-area-inset-top,0px)) 12px 6px; border-bottom:2px dashed var(--line); background:var(--paper)}
+.top a{display:inline-flex; align-items:center; gap:6px; text-decoration:none; color:var(--ink); font-weight:900; font-size:14px; border:2px solid var(--ink); border-radius:12px; padding:4px 12px; box-shadow:0 3px 0 var(--ink)}
+.top a:active{transform:translateY(2px); box-shadow:0 1px 0 var(--ink)}
+.top .t{font-weight:900; font-size:15px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.stage{flex:1; position:relative; display:flex; justify-content:center; background:#f3e6d2; padding-bottom:env(safe-area-inset-bottom,0px)}
+iframe{border:0; width:100%; max-width:560px; height:100%; display:block; background:var(--paper)}
+.msg{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; padding:24px; color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="top"><a href="./#cases">← 案件簿</a><span class="t" id="t">毛豆丸偵探社</span></div>
+<div class="stage" id="stage"><div class="msg" id="msg">正在打開案件……</div></div>
+<script>
+/* 讀案件清單：放在網站上時讀 chapters.json；直接雙擊打開時瀏覽器不准讀檔，改用 chapters.js */
+async function loadChapters(){
+  try{ const r=await fetch('chapters.json',{cache:'no-cache'}); if(r.ok) return await r.json(); }catch(e){}
+  if(!window.MDW_CHAPTERS) await new Promise(res=>{ const s=document.createElement('script'); s.src='chapters.js?'+Date.now(); s.onload=res; s.onerror=res; document.head.appendChild(s); });
+  if(window.MDW_CHAPTERS) return window.MDW_CHAPTERS;
+  throw new Error('no chapters');
+}
+(async()=>{
+  const id=new URLSearchParams(location.search).get('c')||'';
+  const msg=document.getElementById('msg');
+  if(!/^c\d{2}$/.test(id)){ msg.textContent='找不到這個案件。'; return; }
+  let ch=null;
+  try{ const d=await loadChapters(); ch=(d.chapters||[]).find(c=>c.id===id); }catch(e){}
+  if(ch){ document.getElementById('t').textContent=`第 ${ch.no} 案・${ch.title}`; document.title=`${ch.title}・毛豆丸偵探社`; }
+  if(ch && ch.status!=='published'){ msg.textContent='這個案件還在調查中，敬請期待！'; return; }
+  const f=document.createElement('iframe');
+  f.title=ch?ch.title:'遊戲'; f.allow='autoplay; fullscreen'; f.src=`play/${id}/index.html`;
+  f.onload=()=>msg.remove();
+  document.getElementById('stage').appendChild(f);
+  setTimeout(()=>{ if(msg.isConnected) msg.textContent='讀取有點久……第一次打開要下載圖片和音樂，請稍等。'; }, 6000);
+})();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>

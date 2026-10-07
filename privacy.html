@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>隱私權政策・毛豆丸偵探社</title>
+<link rel="icon" href="icons/icon-192.png">
+<style>
+:root{--paper:#fff8ef; --ink:#3a2e2a; --muted:#7d6c5f; --line:#ead9bd}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif; line-height:1.8}
+main{max-width:44em; margin:0 auto; padding:32px 20px calc(48px + env(safe-area-inset-bottom,0px))}
+h1{font-size:30px; margin:0 0 6px} h2{font-size:20px; margin:28px 0 6px}
+p,li{color:var(--ink)} .muted{color:var(--muted)}
+a{color:inherit; font-weight:700}
+.mail{user-select:all; font-weight:700}
+</style>
+</head>
+<body>
+<main>
+<p><a href="./">← 回到毛豆丸偵探社</a></p>
+<h1>隱私權政策</h1>
+<p class="muted">最後更新：2026 年 10 月 7 日</p>
+
+<p>「毛豆丸偵探社」（以下稱本遊戲，包含網站與 Android App）是一款給兒童遊玩的偵探遊戲。我們重視孩子的隱私，以下說明本遊戲如何處理資料。</p>
+
+<h2>我們不蒐集個人資料</h2>
+<ul>
+<li>本遊戲不需要註冊或登入，不會要求姓名、電子郵件、生日、照片或任何個人資料。</li>
+<li>本遊戲不使用相機、麥克風、定位、通訊錄等裝置權限。</li>
+<li>本遊戲沒有聊天、留言或與其他玩家互動的功能。</li>
+</ul>
+
+<h2>沒有廣告，也沒有追蹤</h2>
+<ul>
+<li>本遊戲不顯示廣告，不使用任何第三方分析、追蹤或廣告工具。</li>
+<li>本遊戲沒有遊戲內購買。</li>
+</ul>
+
+<h2>存在裝置上的資料</h2>
+<p>為了讓沒有網路時也能玩，瀏覽器或 App 會把網站內容（遊戲、圖片、音樂）暫存在你的裝置上。這些內容只是遊戲本身，不包含任何個人資料，也不會傳回給我們。清除瀏覽器資料或移除 App 就會一併刪除。</p>
+
+<h2>網站主機</h2>
+<p>本網站放在 GitHub Pages。和瀏覽任何網站一樣，主機服務商為了提供與保護服務，可能會記錄連線的技術資訊（例如 IP 位址）。我們不會取得或使用這些紀錄。</p>
+
+<h2>站外連結</h2>
+<p>網站上的「贊助」會連到站外的付款頁面。打開之前必須先通過家長驗證，避免孩子誤觸。站外網頁有各自的隱私權政策。</p>
+
+<h2>聯絡我們</h2>
+<p>對本政策有任何問題，請寫信到：<span class="mail" id="mail">請改成你的聯絡信箱</span></p>
+</main>
+<script>/* 讀案件清單：放在網站上時讀 chapters.json；直接雙擊打開時瀏覽器不准讀檔，改用 chapters.js */
+async function loadChapters(){
+  try{ const r=await fetch('chapters.json',{cache:'no-cache'}); if(r.ok) return await r.json(); }catch(e){}
+  if(!window.MDW_CHAPTERS) await new Promise(res=>{ const s=document.createElement('script'); s.src='chapters.js?'+Date.now(); s.onload=res; s.onerror=res; document.head.appendChild(s); });
+  if(window.MDW_CHAPTERS) return window.MDW_CHAPTERS;
+  throw new Error('no chapters');
+}
+loadChapters().then(d=>{ if(d.site&&d.site.contactEmail) document.getElementById('mail').textContent=d.site.contactEmail; }).catch(()=>{});</script>
+</body>
+</html>

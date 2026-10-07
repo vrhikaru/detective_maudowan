@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>安裝到手機・毛豆丸偵探社</title>
+<meta name="theme-color" content="#e8823c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+:root{
+  --paper:#fff8ef; --card:#ffffff; --ink:#3a2e2a; --muted:#7d6c5f; --line:#ead9bd; --well:#f6ecdc; --kraft:#e9cfa3; --kraft-ink:#7a4e2a;
+  --mao:#e8823c; --dou:#3f9bd8; --wan:#e86ca0; --warn:#c98a2a;
+  --f-display:"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-body); line-height:1.75}
+main{max-width:760px; margin:0 auto; padding:28px 20px calc(48px + env(safe-area-inset-bottom,0px))}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dou); outline-offset:3px; border-radius:6px}
+h1,h2{font-family:var(--f-display); font-weight:400; margin:0; line-height:1.25; text-wrap:balance}
+h1{font-size:clamp(30px,6vw,42px); margin:10px 0 6px}
+.lead{color:var(--muted); margin:0 0 22px}
+.back{font-weight:700}
+.card{background:var(--card); border:3px solid var(--c,var(--line)); border-radius:22px; padding:20px 22px; margin-bottom:22px; box-shadow:0 6px 0 color-mix(in srgb,var(--c,var(--line)) 30%,transparent)}
+.card h2{font-size:26px; display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+.card h2 .tag{font-family:var(--f-body); font-size:12px; font-weight:900; letter-spacing:.1em; color:#fff; background:var(--c); border-radius:8px; padding:1px 9px}
+ol{margin:12px 0 0; padding-left:1.4em} li{margin:8px 0}
+.btn{display:inline-flex; align-items:center; gap:8px; font:inherit; font-weight:900; font-size:17px; text-decoration:none; cursor:pointer; margin-top:14px;
+  border:3px solid var(--ink); background:var(--mao); color:#fff; border-radius:16px; padding:12px 22px; box-shadow:0 5px 0 var(--ink)}
+.btn:active{transform:translateY(4px); box-shadow:0 1px 0 var(--ink)}
+.btn.plain{background:var(--card); color:var(--ink)}
+.meta{font-size:14px; color:var(--muted); margin-top:8px}
+.tip{background:var(--well); border-radius:14px; padding:12px 16px; margin-top:14px; font-size:15px}
+.tip b{color:var(--kraft-ink)}
+.soon{color:var(--muted); font-weight:700; margin-top:12px}
+.mail{user-select:all; font-weight:700}
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="./">← 回到毛豆丸偵探社</a>
+  <h1>把偵探社裝到手機上</h1>
+  <p class="lead">裝好之後就像一般 App，從桌面一點就能玩；玩過一次的案件，沒有網路也能玩。不想安裝的話，直接在瀏覽器裡玩也可以。</p>
+
+  <section class="card" style="--c:var(--dou)" id="android">
+    <h2>Android 手機、平板 <span class="tag">試玩版</span></h2>
+    <div id="apkBox">
+      <p>試玩版還沒有放上來，先<a href="#web">用瀏覽器玩</a>，或在 Chrome 選單裡按「安裝應用程式」／「加到主畫面」。</p>
+    </div>
+  </section>
+
+  <section class="card" style="--c:var(--wan)" id="ios">
+    <h2>iPhone、iPad</h2>
+    <ol>
+      <li>用 <b>Safari</b> 打開這個網站（Chrome 或 LINE 裡的瀏覽器不行）。</li>
+      <li>點畫面下方（iPad 在右上方）的<b>分享按鈕</b>，就是方框加向上箭頭的那個圖示。</li>
+      <li>往下滑，點<b>「加入主畫面」</b>，再點右上角的<b>「新增」</b>。</li>
+      <li>回到桌面，點「毛豆丸」圖示就能開始玩。</li>
+    </ol>
+  </section>
+
+  <section class="card" style="--c:var(--mao)" id="web">
+    <h2>直接在瀏覽器玩</h2>
+    <p>手機、平板、電腦都可以。打開官網，在案件簿挑一個案件，按「開始辦案」。</p>
+    <a class="btn plain" href="./#cases">🔍 看案件簿</a>
+  </section>
+
+  <section class="card" style="--c:var(--kraft)" id="feedback">
+    <h2>試玩心得、遇到問題</h2>
+    <p>小孩卡在哪裡、哪裡覺得好玩、哪裡看不懂，都很想知道！這些回饋會直接拿來改遊戲。</p>
+    <div id="fbBox"></div>
+  </section>
+</main>
+<script>
+/* 讀案件清單：放在網站上時讀 chapters.json；直接雙擊打開時瀏覽器不准讀檔，改用 chapters.js */
+async function loadChapters(){
+  try{ const r=await fetch('chapters.json',{cache:'no-cache'}); if(r.ok) return await r.json(); }catch(e){}
+  if(!window.MDW_CHAPTERS) await new Promise(res=>{ const s=document.createElement('script'); s.src='chapters.js?'+Date.now(); s.onload=res; s.onerror=res; document.head.appendChild(s); });
+  if(window.MDW_CHAPTERS) return window.MDW_CHAPTERS;
+  throw new Error('no chapters');
+}
+const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+(async()=>{
+  let site={};
+  try{ site=(await loadChapters()).site||{}; }catch(e){}
+  const a=site.android||{};
+  let has=false;
+  if(a.apk){ if(location.protocol==='file:') has=!!a.version; else { try{ const r=await fetch(a.apk,{method:'HEAD',cache:'no-cache'}); has=r.ok; }catch(e){} } }
+  if(has){
+    document.getElementById('apkBox').innerHTML=`
+      <a class="btn" href="${esc(a.apk)}" download>⬇ 下載試玩版 APK</a>
+      <p class="meta">${a.version?`版本 ${esc(a.version)}`:''}${a.updated?`・更新於 ${esc(a.updated)}`:''}</p>
+      <ol>
+        <li>用手機的 Chrome 打開這一頁，點上面的下載按鈕。</li>
+        <li>下載完成後點通知列裡的檔案（或到「檔案」App 的「下載」資料夾找 <b>maodouwan.apk</b>）。</li>
+        <li>第一次會問要不要允許 Chrome「安裝不明應用程式」，點<b>設定</b>，打開允許，再按返回。</li>
+        <li>按<b>安裝</b>。如果跳出 Play 安全防護的提醒，點<b>「更多詳細資料」→「仍要安裝」</b>。</li>
+      </ol>
+      <div class="tip"><b>為什麼會跳出提醒？</b>因為試玩版還沒上架 Google Play，手機不認得它。這個 App 沒有廣告、不蒐集任何資料，只會打開毛豆丸偵探社的網站。正式上架之後，就能直接從 Google Play 安裝。</div>`;
+  }
+  const fb=document.getElementById('fbBox'); const parts=[];
+  if(site.feedbackUrl) parts.push(`<a class="btn" href="${esc(site.feedbackUrl)}" target="_blank" rel="noopener">💬 到試玩社群分享</a>`);
+  if(site.contactEmail && !/請改成/.test(site.contactEmail)) parts.push(`<p>也可以寫信給我們：<span class="mail">${esc(site.contactEmail)}</span></p>`);
+  fb.innerHTML=parts.join('') || '<p class="soon">回饋管道準備中。</p>';
+})();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>

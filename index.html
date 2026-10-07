@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>毛豆丸偵探社</title>
+<meta name="description" content="給孩子一起玩的偵探遊戲：丸小姐看現場、豆小弟跑外勤、毛大哥做推理，三個人一起把案子破了。">
+<meta name="theme-color" content="#e8823c">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta property="og:title" content="毛豆丸偵探社">
+<meta property="og:description" content="一個人破不了的案，三個一起破。給孩子一起玩的偵探遊戲。">
+<meta property="og:image" content="assets/hero.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&family=Noto+Sans+TC:wght@400;500;700;900&display=swap">
+<style>
+/* 版面：一本偵探社的「案件簿」——頁首是偵探社招牌，中段是案件卷宗，後段是三位偵探的名牌與給家長的說明 */
+:root{
+  --paper:#fff8ef; --card:#ffffff; --ink:#3a2e2a; --muted:#7d6c5f; --line:#ead9bd; --well:#f6ecdc; --kraft:#e9cfa3; --kraft-ink:#7a4e2a;
+  --mao:#e8823c; --dou:#3f9bd8; --wan:#e86ca0; --ok:#4caf7d; --stamp:#c94a3d;
+  --f-display:"Huninn","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  --f-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} *{animation:none !important; transition:none !important} }
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--f-body); font-size:16px; line-height:1.7;}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dou); outline-offset:3px; border-radius:6px}
+h1,h2,h3{font-family:var(--f-display); font-weight:400; margin:0; text-wrap:balance; line-height:1.2}
+.wrap{max-width:1080px; margin:0 auto; padding-inline:20px}
+
+/* 招牌列 */
+.bar{position:sticky; top:0; z-index:10; background:color-mix(in srgb,var(--paper) 92%,transparent); backdrop-filter:blur(6px); border-bottom:2px dashed var(--line); padding-top:env(safe-area-inset-top,0px)}
+.bar .wrap{display:flex; align-items:center; gap:14px; min-height:60px; flex-wrap:wrap}
+.logo{display:flex; align-items:center; gap:10px; text-decoration:none; font-family:var(--f-display); font-size:22px}
+.logo img{width:36px; height:36px; border-radius:10px}
+.logo .m{color:var(--mao)} .logo .d{color:var(--dou)} .logo .w{color:var(--wan)}
+.nav{display:flex; gap:4px 16px; flex-wrap:wrap; margin-left:auto; font-weight:700; font-size:15px}
+.nav a{text-decoration:none; padding:6px 2px; border-bottom:3px solid transparent}
+.nav a:hover{border-bottom-color:var(--mao)}
+
+/* 開場 */
+.hero{padding-block:48px 36px}
+.hero .wrap{display:grid; gap:32px; align-items:center; grid-template-columns:minmax(0,1fr)}
+@media (min-width:820px){ .hero .wrap{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)} }
+.kicker{display:inline-block; font-weight:900; font-size:13px; letter-spacing:.2em; color:var(--kraft-ink); background:var(--kraft); padding:3px 12px; border-radius:6px; transform:rotate(-1.5deg)}
+.hero h1{font-size:clamp(42px,7vw,76px); margin-top:14px}
+.hero h1 .m{color:var(--mao)} .hero h1 .d{color:var(--dou)} .hero h1 .w{color:var(--wan)}
+.motto{font-family:var(--f-display); font-size:clamp(20px,2.6vw,26px); margin:14px 0 6px}
+.hero p.lead{color:var(--muted); max-width:34em; margin:0}
+.cta{display:flex; flex-wrap:wrap; gap:12px; margin-top:24px}
+.btn{display:inline-flex; align-items:center; gap:8px; font:inherit; font-weight:900; font-size:17px; text-decoration:none; cursor:pointer;
+  border:3px solid var(--ink); background:var(--card); color:var(--ink); border-radius:16px; padding:12px 22px; box-shadow:0 5px 0 var(--ink); transition:transform .08s, box-shadow .08s}
+.btn:active{transform:translateY(4px); box-shadow:0 1px 0 var(--ink)}
+.btn.go{background:var(--mao); color:#fff}
+.btn[aria-disabled="true"]{opacity:.5; pointer-events:none}
+.hero-art{position:relative; aspect-ratio:4/3; max-width:100%; border-radius:26px; overflow:hidden; border:4px solid var(--ink); box-shadow:10px 10px 0 var(--kraft); background:var(--well)}
+.hero-art img{width:100%; height:100%; object-fit:cover; display:block}
+.hero-art .ph{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; gap:4%; font-size:clamp(56px,10vw,96px)}
+.hero-art .badge{position:absolute; right:14px; bottom:14px; background:var(--card); border:3px solid var(--ink); border-radius:12px; padding:4px 12px; font-weight:900; font-size:14px}
+
+section{padding-block:44px}
+.sec-h{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 16px; margin-bottom:22px}
+.sec-h h2{font-size:clamp(30px,4vw,40px)}
+.sec-h p{margin:0; color:var(--muted)}
+
+/* 案件簿：牛皮紙卷宗 */
+.cases{display:grid; gap:26px; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.case{position:relative; background:var(--kraft); border-radius:6px 18px 18px 18px; padding:14px; display:flex; flex-direction:column; gap:12px; box-shadow:0 6px 0 rgba(122,78,42,.25); margin-top:18px}
+.case::before{content:attr(data-tab); position:absolute; top:-26px; left:0; background:var(--kraft); color:var(--kraft-ink); font-weight:900; font-size:13px; letter-spacing:.15em; padding:4px 16px 2px; border-radius:12px 12px 0 0}
+.case .cover{position:relative; aspect-ratio:4/3; border-radius:12px; overflow:hidden; background:var(--well); border:3px solid #fffaf0}
+.case .cover img{width:100%; height:100%; object-fit:cover; display:block}
+.case .cover .ph{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:64px}
+.case .sheet{background:#fffaf0; border-radius:12px; padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px; flex:1}
+.case h3{font-size:24px}
+.case .sum{margin:0; font-size:15px; color:var(--muted); flex:1}
+.tags{display:flex; flex-wrap:wrap; gap:6px; font-size:13px; font-weight:700}
+.tags span{background:var(--well); border-radius:20px; padding:2px 10px}
+.stamp{position:absolute; top:10px; right:10px; font-family:var(--f-display); font-size:18px; color:var(--stamp); border:3px solid var(--stamp); border-radius:10px; padding:2px 10px; transform:rotate(8deg); background:rgba(255,250,240,.85)}
+.case.soon .cover{filter:grayscale(.6) brightness(.95)}
+.case.soon .stamp{color:var(--muted); border-color:var(--muted)}
+.case .btn{align-self:flex-start; font-size:16px; padding:10px 18px}
+.empty{color:var(--muted)}
+[hidden]{display:none !important}
+
+/* 三位小偵探：名牌 */
+.team{display:grid; gap:20px; grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
+.badge-card{background:var(--card); border:3px solid var(--c); border-radius:22px; padding:18px; display:grid; grid-template-columns:auto minmax(0,1fr); gap:14px; align-items:center; box-shadow:0 6px 0 color-mix(in srgb,var(--c) 35%,transparent)}
+.badge-card .face{width:84px; height:84px; border-radius:18px; background:color-mix(in srgb,var(--c) 14%,#fff); display:flex; align-items:center; justify-content:center; font-size:52px; overflow:hidden}
+.badge-card .face img{width:100%; height:100%; object-fit:contain}
+.badge-card .role{display:inline-block; font-size:12px; font-weight:900; letter-spacing:.12em; color:#fff; background:var(--c); border-radius:8px; padding:1px 9px}
+.badge-card h3{font-size:26px; margin:4px 0 2px}
+.badge-card p{margin:0; font-size:14.5px; color:var(--muted)}
+
+/* 給家長 */
+.parents{display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))}
+.note{background:var(--card); border:2px solid var(--line); border-radius:18px; padding:18px 20px}
+.note h3{font-size:22px; margin-bottom:8px}
+.note ul{margin:0; padding-left:1.2em}
+.note li{margin:4px 0}
+
+/* 贊助 */
+.support{background:var(--ink); color:var(--paper); border-radius:26px; padding:28px; display:grid; gap:16px; grid-template-columns:minmax(0,1fr); align-items:center}
+@media (min-width:760px){ .support{grid-template-columns:minmax(0,1fr) auto} }
+.support h2{font-size:clamp(26px,3.4vw,34px)}
+.support p{margin:6px 0 0; opacity:.85; max-width:36em}
+.support .btn{border-color:var(--paper); box-shadow:0 5px 0 var(--paper)}
+
+footer{padding-block:30px calc(30px + env(safe-area-inset-bottom,0px)); border-top:2px dashed var(--line); color:var(--muted); font-size:14px}
+footer .wrap{display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center}
+footer .mail{user-select:all; font-weight:700; color:var(--ink)}
+
+/* 家長驗證 */
+dialog{border:3px solid var(--ink); border-radius:22px; padding:22px; max-width:min(92vw,380px); background:var(--paper); color:var(--ink); box-shadow:0 10px 0 var(--ink)}
+dialog::backdrop{background:rgba(58,46,42,.5)}
+dialog h3{font-size:22px}
+dialog p{margin:8px 0}
+dialog input{font:inherit; font-size:22px; width:100%; padding:8px 12px; border:2px solid var(--line); border-radius:12px; text-align:center; background:var(--card); color:var(--ink)}
+dialog .row{display:flex; gap:10px; margin-top:14px; flex-wrap:wrap}
+dialog .err{color:var(--stamp); font-weight:700; min-height:1.4em; margin:6px 0 0}
+dialog .go-link{display:none; word-break:break-all}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="#top"><img src="icons/icon-192.png" alt=""><span><span class="m">毛</span><span class="d">豆</span><span class="w">丸</span>偵探社</span></a>
+    <nav class="nav" aria-label="主要">
+      <a href="#cases">案件簿</a><a href="#team">三位小偵探</a><a href="#parents">給家長</a><a href="#support">贊助</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <span class="kicker">偵探社 · 營業中</span>
+        <h1><span class="m">毛</span><span class="d">豆</span><span class="w">丸</span>偵探社</h1>
+        <p class="motto">「一個人破不了的案，三個一起破。」</p>
+        <p class="lead">一款給孩子一起玩的偵探遊戲。丸小姐用放大鏡搜現場，豆小弟跑遍小鎮比對證據，毛大哥翻開名冊推理出兇手。每個人都有只有自己能做的事，少了誰都破不了案。</p>
+        <div class="cta">
+          <a class="btn go" id="startBtn" href="#cases">🔍 開始辦案</a>
+          <a class="btn" href="#cases">看全部案件</a>
+          <a class="btn web-only" href="install.html">📱 裝到手機</a>
+        </div>
+      </div>
+      <div class="hero-art" id="heroArt">
+        <div class="ph" aria-hidden="true">🦊🐶🐱</div>
+        <span class="badge">毛豆丸偵探社</span>
+      </div>
+    </div>
+  </div>
+
+  <section id="cases">
+    <div class="wrap">
+      <div class="sec-h"><h2>案件簿</h2><p>每一案都是一個完整的故事，大約半小時，可以一次玩完，也可以分兩天玩。</p></div>
+      <div class="cases" id="caseList"><p class="empty">正在翻開案件簿……</p></div>
+    </div>
+  </section>
+
+  <section id="team">
+    <div class="wrap">
+      <div class="sec-h"><h2>三位小偵探</h2><p>三個人分工合作，輪流上場。</p></div>
+      <div class="team">
+        <div class="badge-card" style="--c:var(--wan)"><div class="face" data-char="char_wan">🐱</div><div><span class="role">現場之眼</span><h3>丸小姐</h3><p>安靜、眼睛最尖。拿著放大鏡在現場一寸一寸找，再小的線索也逃不過她。</p></div></div>
+        <div class="badge-card" style="--c:var(--dou)"><div class="face" data-char="char_dou">🐶</div><div><span class="role">行動組</span><h3>豆小弟</h3><p>精力用不完。跑遍小鎮去嫌疑犯家裡，塞細縫、對牙印、拍照帶回證據。</p></div></div>
+        <div class="badge-card" style="--c:var(--mao)"><div class="face" data-char="char_mao">🦊</div><div><span class="role">首席推理</span><h3>毛大哥</h3><p>推推眼鏡就開始想。把線索拼起來、從名冊篩出嫌疑犯，最後點名真正的兇手。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="parents">
+    <div class="wrap">
+      <div class="sec-h"><h2>給家長</h2><p>這是爸爸為家裡三個孩子做的遊戲，希望你家的孩子也玩得開心。</p></div>
+      <div class="parents">
+        <div class="note"><h3>怎麼玩</h3><ul>
+          <li>一台平板或手機就夠，三個孩子輪流操作畫面下方的三個角色。</li>
+          <li>每個角色只能做自己的事，卡住時要換人，自然就會互相討論。</li>
+          <li>右上角「卡住了？」會給提示，不會有失敗或倒數計時。</li>
+        </ul></div>
+        <div class="note"><h3>孩子會練到</h3><ul>
+          <li><b>觀察</b>：在畫面裡找出不對勁的地方，記住咬痕的形狀。</li>
+          <li><b>推理</b>：用兩個條件同時篩選，把不可能的人劃掉。</li>
+          <li><b>合作</b>：線索要交給下一個人，才能往下走。</li>
+        </ul></div>
+        <div class="note web-only"><h3>正在試玩中</h3><ul>
+          <li>Android 可以下載試玩版，iPhone、iPad 可以加到主畫面，<a href="install.html">看安裝說明</a>。</li>
+          <li>小孩卡在哪裡、覺得哪裡好玩，都很想聽聽，<a href="install.html#feedback">回饋方式在這裡</a>。</li>
+        </ul></div>
+        <div class="note"><h3>可以放心</h3><ul>
+          <li>沒有廣告，沒有遊戲內購買。</li>
+          <li>不需要帳號，不蒐集任何個人資料。</li>
+          <li>玩過一次之後，沒有網路也能玩。</li>
+        </ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="wrap">
+      <div class="support">
+        <div><h2>喜歡的話，請偵探社喝杯飲料</h2><p>所有案件都免費。如果你想支持我們繼續做新的案件，可以贊助一點點，金額隨意。</p></div>
+        <button class="btn" id="supportBtn" type="button">☕ 贊助偵探社</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© <span id="year"></span> 毛豆丸偵探社</span>
+    <a href="privacy.html">隱私權政策</a>
+    <span>聯絡我們：<span class="mail" id="mail"></span></span>
+  </div>
+</footer>
+
+<dialog id="gate" aria-labelledby="gateTitle">
+  <form method="dialog" id="gateForm">
+    <h3 id="gateTitle">請家長協助</h3>
+    <p>接下來會打開偵探社以外的網頁。請大人回答這一題：</p>
+    <p style="font-size:22px; font-weight:900; text-align:center" id="gateQ"></p>
+    <label for="gateA" style="position:absolute; left:-9999px">答案</label>
+    <input id="gateA" inputmode="numeric" autocomplete="off">
+    <p class="err" id="gateErr"></p>
+    <p class="go-link" id="gateLink"></p>
+    <div class="row">
+      <button class="btn go" id="gateOk" value="ok">確定</button>
+      <button class="btn" value="cancel" formnovalidate>取消</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+/* 讀案件清單：放在網站上時讀 chapters.json；直接雙擊打開時瀏覽器不准讀檔，改用 chapters.js */
+async function loadChapters(){
+  try{ const r=await fetch('chapters.json',{cache:'no-cache'}); if(r.ok) return await r.json(); }catch(e){}
+  if(!window.MDW_CHAPTERS) await new Promise(res=>{ const s=document.createElement('script'); s.src='chapters.js?'+Date.now(); s.onload=res; s.onerror=res; document.head.appendChild(s); });
+  if(window.MDW_CHAPTERS) return window.MDW_CHAPTERS;
+  throw new Error('no chapters');
+}
+const $=id=>document.getElementById(id);
+const IN_APP = matchMedia('(display-mode: standalone)').matches || document.referrer.startsWith('android-app://') || navigator.standalone===true;
+if(IN_APP) document.querySelectorAll('.web-only').forEach(el=>el.hidden=true);
+$('year').textContent=new Date().getFullYear();
+let SITE={};
+const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const imgOK=(src)=>new Promise(r=>{ if(!src) return r(false); const i=new Image(); i.onload=()=>r(true); i.onerror=()=>r(false); i.src=src; });
+
+async function loadContent(){
+  let data;
+  try{ data=await loadChapters(); }
+  catch(e){ $('caseList').innerHTML='<p class="empty">案件簿暫時打不開，請稍後再試。</p>'; return; }
+  SITE=data.site||{};
+  $('mail').textContent=SITE.contactEmail||'';
+  if(!SITE.sponsorUrl) $('support').hidden=true;
+  // 角色圖與首頁大圖：有放就換上
+  for(const el of document.querySelectorAll('[data-char]')){ const src=(SITE.chars||{})[el.dataset.char]; if(src && await imgOK(src)) el.innerHTML=`<img src="${esc(src)}" alt="">`; }
+  if(SITE.hero && await imgOK(SITE.hero)) $('heroArt').insertAdjacentHTML('afterbegin',`<img src="${esc(SITE.hero)}" alt="三位小偵探">`), $('heroArt').querySelector('.ph').remove();
+  const list=(data.chapters||[]).slice().sort((a,b)=>a.no-b.no);
+  const first=list.find(c=>c.status==='published');
+  if(first) $('startBtn').href=`play.html?c=${encodeURIComponent(first.id)}`;
+  $('caseList').innerHTML = list.length ? list.map(c=>{
+    const pub=c.status==='published';
+    const tags=[c.minutes?`約 ${c.minutes} 分鐘`:'', c.ages?`${c.ages} 歲`:'', c.players?`${c.players}`:''].filter(Boolean);
+    return `<article class="case ${pub?'':'soon'}" data-tab="CASE ${String(c.no).padStart(2,'0')}">
+      <div class="cover">${c.cover?`<img src="${esc(c.cover)}" alt="" loading="lazy" onerror="this.remove()">`:''}<div class="ph" aria-hidden="true">${esc(c.emoji||'🔍')}</div></div>
+      <span class="stamp">${pub?(c.stamp||'可以辦案'):'調查中'}</span>
+      <div class="sheet">
+        <h3>${esc(c.title)}</h3>
+        <p class="sum">${esc(c.summary||'')}</p>
+        ${tags.length?`<div class="tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+        ${pub?`<a class="btn go" href="play.html?c=${encodeURIComponent(c.id)}">🔍 開始辦案</a>`:`<span class="btn" aria-disabled="true">🔒 ${esc(c.soonText||'即將推出')}</span>`}
+      </div></article>`;
+  }).join('') : '<p class="empty">案件簿還是空的。</p>';
+  // 封面圖載入後蓋掉 emoji
+  document.querySelectorAll('.case .cover img').forEach(img=>{ const done=()=>{ if(img.naturalWidth) img.nextElementSibling?.remove(); }; img.complete?done():img.addEventListener('load',done); });
+}
+loadContent();
+
+/* 家長驗證：打開站外連結前先回答一題乘法 */
+let gateAns=0;
+$('supportBtn').onclick=()=>{
+  const a=6+Math.floor(Math.random()*4), b=6+Math.floor(Math.random()*4); gateAns=a*b;
+  $('gateQ').textContent=`${a} × ${b} = ？`; $('gateA').value=''; $('gateErr').textContent=''; $('gateLink').style.display='none'; $('gateOk').hidden=false;
+  $('gate').showModal(); $('gateA').focus();
+};
+$('gateForm').addEventListener('submit',e=>{
+  if(e.submitter && e.submitter.value==='cancel') return;
+  e.preventDefault();
+  if(parseInt($('gateA').value,10)!==gateAns){ $('gateErr').textContent='答案不對喔，請再算一次。'; return; }
+  const url=SITE.sponsorUrl; if(!url) return;
+  const w=window.open(url,'_blank','noopener');
+  if(!w){ $('gateErr').textContent=''; $('gateLink').innerHTML=`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(url)}</a>`; $('gateLink').style.display='block'; $('gateOk').hidden=true; return; }
+  $('gate').close();
+});
+
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>

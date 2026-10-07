@@ -1,0 +1,19 @@
+{
+  "name": "毛豆丸偵探社",
+  "short_name": "毛豆丸",
+  "description": "給孩子一起玩的偵探遊戲：一個人破不了的案，三個一起破。",
+  "lang": "zh-Hant",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fff8ef",
+  "theme_color": "#e8823c",
+  "categories": ["games", "kids", "education"],
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
