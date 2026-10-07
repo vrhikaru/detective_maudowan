@@ -1,0 +1,1 @@
+把 PWABuilder 給的 assetlinks.json 放在這個資料夾，檔名不要改。

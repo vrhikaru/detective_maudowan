@@ -6,6 +6,7 @@
 <title>毛豆丸偵探社</title>
 <meta name="description" content="給孩子一起玩的偵探遊戲：丸小姐看現場、豆小弟跑外勤、毛大哥做推理，三個人一起把案子破了。">
 <meta name="theme-color" content="#e8823c">
+<meta name="author" content="毛豆丸工作室">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -111,6 +112,7 @@ section{padding-block:44px}
 footer{padding-block:30px calc(30px + env(safe-area-inset-bottom,0px)); border-top:2px dashed var(--line); color:var(--muted); font-size:14px}
 footer .wrap{display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center}
 footer .mail{user-select:all; font-weight:700; color:var(--ink)}
+footer .legal{flex-basis:100%; margin:0; font-size:13px; max-width:52em}
 
 /* 家長驗證 */
 dialog{border:3px solid var(--ink); border-radius:22px; padding:22px; max-width:min(92vw,380px); background:var(--paper); color:var(--ink); box-shadow:0 10px 0 var(--ink)}
@@ -211,9 +213,10 @@ dialog .go-link{display:none; word-break:break-all}
 
 <footer>
   <div class="wrap">
-    <span>© <span id="year"></span> 毛豆丸偵探社</span>
+    <span>© <span id="year"></span> 毛豆丸工作室　版權所有</span>
     <a href="privacy.html">隱私權政策</a>
-    <span>聯絡我們：<span class="mail" id="mail"></span></span>
+    <span>聯絡我們：<a class="mail" id="mail" href="mailto:douwanmao@gmail.com">douwanmao@gmail.com</a></span>
+    <p class="legal">《毛豆丸偵探社》的故事、角色、美術、音樂與程式皆屬毛豆丸工作室所有。歡迎在家裡或教室裡免費使用；未經同意，請勿轉載、改作或用於商業用途。</p>
   </div>
 </footer>
 
@@ -244,7 +247,7 @@ async function loadChapters(){
 const $=id=>document.getElementById(id);
 const IN_APP = matchMedia('(display-mode: standalone)').matches || document.referrer.startsWith('android-app://') || navigator.standalone===true;
 if(IN_APP) document.querySelectorAll('.web-only').forEach(el=>el.hidden=true);
-$('year').textContent=new Date().getFullYear();
+$('year').textContent=(()=>{const y=new Date().getFullYear(); return y>2026?`2026–${y}`:'2026';})();
 let SITE={};
 const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const imgOK=(src)=>new Promise(r=>{ if(!src) return r(false); const i=new Image(); i.onload=()=>r(true); i.onerror=()=>r(false); i.src=src; });
@@ -254,7 +257,7 @@ async function loadContent(){
   try{ data=await loadChapters(); }
   catch(e){ $('caseList').innerHTML='<p class="empty">案件簿暫時打不開，請稍後再試。</p>'; return; }
   SITE=data.site||{};
-  $('mail').textContent=SITE.contactEmail||'';
+  if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(SITE.contactEmail||'')){ $('mail').textContent=SITE.contactEmail; $('mail').href='mailto:'+SITE.contactEmail; }
   if(!SITE.sponsorUrl) $('support').hidden=true;
   // 角色圖與首頁大圖：有放就換上
   for(const el of document.querySelectorAll('[data-char]')){ const src=(SITE.chars||{})[el.dataset.char]; if(src && await imgOK(src)) el.innerHTML=`<img src="${esc(src)}" alt="">`; }

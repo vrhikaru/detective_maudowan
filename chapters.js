@@ -1,7 +1,7 @@
 /* 由套版台「發布到網站」自動產生，內容和 chapters.json 一樣，讓直接雙擊打開網頁時也能預覽 */
 window.MDW_CHAPTERS = {
   "site": {
-    "contactEmail": "douwanmao@gmail.com",
+    "contactEmail": "請改成你的聯絡信箱",
     "sponsorUrl": "",
     "feedbackUrl": "",
     "android": {
