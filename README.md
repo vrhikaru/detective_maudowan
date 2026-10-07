@@ -1,130 +1,51 @@
-# 毛豆丸偵探社・官網與上架手冊
+# 🔍 毛豆丸偵探社
 
-這個資料夾就是官網本身，放在 GitHub Pages 上。Android App 會直接「包住」這個網站，所以**網站一更新，App 裡的內容也跟著更新**，新增篇章不用重新上架。
+給孩子一起玩的偵探遊戲：丸小姐看現場、豆小弟跑外勤、毛大哥做推理，三個人一起把案子破了。
 
-```
-site/
-├─ index.html            官網首頁（案件簿、三位小偵探、給家長、贊助）
-├─ play.html             遊玩頁（上方有「← 案件簿」）
-├─ privacy.html          隱私權政策（Google Play 上架必填）
-├─ install.html          安裝說明：Android 試玩版下載、iPhone 加到主畫面、回饋方式
-├─ download/             放 Android 試玩版 maodouwan.apk
-├─ chapters.json         案件清單、聯絡信箱、贊助網址
-├─ play/c01/index.html   第一案的遊戲
-├─ assets/               首頁大圖、角色圖、案件封面
-├─ icons/                網站和 App 圖示
-├─ store/                Google Play 商店用的宣傳圖
-├─ manifest.webmanifest  讓網站可以「安裝」成 App
-├─ sw.js                 離線快取，玩過一次就能離線玩
-├─ .nojekyll             讓 GitHub Pages 發布 .well-known 資料夾（不要刪）
-└─ .well-known/          之後放 Android 驗證檔 assetlinks.json
-```
+**👉 立即開玩：<https://vrhikaru.github.io/>**
+
+不用下載、不用註冊，手機、平板、電腦打開瀏覽器就能玩。
 
 ---
 
-## 一、第一次放上 GitHub Pages（不用打指令）
+## 三位小偵探
 
-1. 安裝 [GitHub Desktop](https://desktop.github.com/)，用你的 GitHub 帳號登入。
-2. 把這個 `site` 資料夾放在專案資料夾裡：`毛豆丸偵探社/site/`。
-3. GitHub Desktop → **File → Add local repository** → 選 `site` 資料夾 → 它會說「不是 Git 倉庫」，按 **create a repository**。
-4. 倉庫名稱填 **`你的帳號.github.io`**（例如 `vrhikaru.github.io`）。
-   > **一定要用這個名稱**：Android App 需要在網域最上層放驗證檔，只有這種倉庫的網址是 `https://你的帳號.github.io/`。如果這個名稱已經被別的專案用掉了，就需要另外買網域。
-5. 按 **Publish repository**，把「Keep this code private」**取消勾選**（免費帳號的 Pages 要公開倉庫）。
-6. 到 GitHub 網站上這個倉庫 → **Settings → Pages** → Source 選 **Deploy from a branch**，Branch 選 **main**、資料夾 **/(root)** → Save。
-7. 等一兩分鐘，打開 `https://你的帳號.github.io/` 就看得到官網。
+| | 角色 | 負責 |
+|---|---|---|
+| 🐱 | **丸小姐**・現場之眼 | 拿著放大鏡在現場一寸一寸找，再小的線索也逃不過她。 |
+| 🐶 | **豆小弟**・行動組 | 跑遍小鎮去嫌疑犯家裡，塞細縫、對牙印、拍照帶回證據。 |
+| 🦊 | **毛大哥**・首席推理 | 把線索拼起來、從名冊篩出嫌疑犯，最後點名真正的兇手。 |
 
-**上線前先改兩個地方**（用記事本打開 `chapters.json`）：
-- `contactEmail`：聯絡信箱（隱私權政策和頁尾會顯示）
-- `sponsorUrl`：贊助網址，例如歐付寶、綠界、Buy Me a Coffee 的頁面。留空的話，贊助區塊不會出現。
+每個人都有只有自己能做的事，少了誰都破不了案。很適合兄弟姊妹、親子或同學輪流一起玩。
 
----
+## 案件簿
 
-## 一之二、做 Android 試玩版，放在網站給人下載（先不上架）
+| | 案件 | 狀態 |
+|---|---|---|
+| 🍰 | **第 1 案　誰偷吃了起司蛋糕**<br>甜點店櫥窗的起司蛋糕被咬了一大口！三兄妹要從現場找出兇手的特徵、翻名冊篩出嫌疑犯，還要揪出躲在背後出主意的主謀。<br>適合 6–10 歲・約 30 分鐘・1～3 人輪流 | 可以辦案 |
+| ✉️ | **第 2 案　沒有署名的委託信**<br>破案那天傍晚，門縫底下悄悄滑進一封沒有署名的委託信…… | 即將推出 |
 
-網站上線後就可以做，不需要 Google Play 帳號。
+新案件推出時，打開網站或 App 就會出現，不用重新安裝。
 
-1. 打開 [pwabuilder.com](https://www.pwabuilder.com/)，貼上 `https://你的帳號.github.io/`，按 **Start**。
-2. 按 **Package For Stores → Android → Generate Package**，設定照第三節的建議填。**Package ID 之後上架 Google Play 也要用同一個**，想好再填。
-3. 下載 zip 並解壓縮，會看到：
-   - **`.apk` 檔**：給人下載安裝的試玩版。改名成 `maodouwan.apk`，放到 `site/download/`。
-   - **`assetlinks.json`**：放到 `site/.well-known/`。少了它，App 上方會多一條網址列。
-   - **`signing.keystore` 和 `signing-key-info.txt`**：簽章金鑰，**一定要備份**，之後更新試玩版、上架 Google Play 都要用同一把。
-4. 打開 `chapters.json`，在 `android` 裡填上 `version`（例如 `"0.1 試玩版"`）和 `updated`（例如 `"2026-10-07"`）。
-5. 用 GitHub Desktop Commit、Push。
-6. 用 Android 手機打開 `https://你的帳號.github.io/install.html`，看得到「下載試玩版 APK」按鈕就完成了。自己先裝一次，確認上方沒有網址列。
+## 怎麼玩
 
-> **之後要上架 Google Play 時**：Google 會用它自己的金鑰重新簽署 App，所以從網站裝試玩版的人，要先移除試玩版，才能從 Google Play 安裝正式版。到時候在社群公告一下就好。
+- **瀏覽器**：打開網站，在案件簿挑一個案件，按「開始辦案」。
+- **Android**：可以下載試玩版 App，請看網站上的[安裝說明](https://vrhikaru.github.io/install.html)。
+- **iPhone、iPad**：用 Safari 打開網站，點分享 →「加入主畫面」，用起來就像 App。
 
-> **試玩版通常不用一直更新**：新案件、換美術都是更新網站，App 打開就會看到。只有改 App 名稱、圖示，才需要重新產生 apk。
+玩過一次的案件，沒有網路也能玩。
 
-## 二、之後上新篇章或換素材
+## 給家長
 
-1. 在**素材套版台**選好專案資料夾，切到要發布的案件。
-2. 按 **🌐 發布到網站**。套版台會把遊戲、封面、角色圖、App 圖示寫進 `site/`，並更新 `chapters.json`。
-   - 這一案還沒有遊戲檔的話，會先以「調查中・即將推出」放上案件簿，當作預告。
-3. 打開 GitHub Desktop，左下角寫一句說明（例如「上架第二案」），按 **Commit to main**，再按 **Push origin**。
-4. 一兩分鐘後網站更新。已經裝好的 App 和網站，下次打開就會看到新篇章。
+- **完全免費**，沒有廣告，沒有 App 內購買。
+- **不蒐集任何資料**，不用註冊帳號。詳見[隱私權政策](https://vrhikaru.github.io/privacy.html)。
+- 網站上的贊助連結有家長驗證，孩子不會誤按。
+- 試玩期間，美術和音樂會陸續更新。
 
-案件簿的文字（簡介、適合年齡、時間）可以直接在 `chapters.json` 改，下次發布時不會被蓋掉。
+試玩心得、孩子卡關的地方、覺得好玩或看不懂的地方，都很歡迎告訴我們，這些回饋會直接拿來改遊戲。
 
 ---
 
-## 三、包成 Android App 上架 Google Play
+© 2026 毛豆丸工作室　版權所有
 
-用 **PWABuilder** 在瀏覽器裡產生上架檔，不需要 Mac，也不用裝 Android Studio。
-
-### 1. 產生 Android 上架檔
-1. 打開 [pwabuilder.com](https://www.pwabuilder.com/)，貼上 `https://你的帳號.github.io/`，按 Start。
-2. 等它檢查完，按 **Package For Stores → Android → Generate Package**。
-3. 設定建議：
-   - **Package ID**：`io.github.你的帳號.maodouwan`（**之後不能改**，想清楚再填）
-   - **App name**：毛豆丸偵探社；**Short name**：毛豆丸
-   - **Display mode**：Standalone；**Orientation**：Portrait
-   - **Signing key**：選「Create new」
-4. 下載 zip，裡面會有：
-   - `*.aab`：上傳到 Google Play 的檔案
-   - `signing.keystore` 和 `signing-key-info.txt`：**簽章金鑰，一定要備份到安全的地方**。弄丟了，之後就沒辦法更新 App。
-   - `assetlinks.json`：網站驗證檔
-
-### 2. 把驗證檔放上網站
-1. 把 `assetlinks.json` 放到 `site/.well-known/assetlinks.json`。
-2. 用 GitHub Desktop Commit、Push。
-3. 打開 `https://你的帳號.github.io/.well-known/assetlinks.json`，看得到內容就成功了。
-
-> 少了這個檔案，App 上方會多出一條網址列，看起來像瀏覽器而不像 App。
-
-### 3. Google Play Console
-1. 到 [Google Play Console](https://play.google.com/console/) 註冊開發者帳號（一次性費用，以頁面上的金額為準）。
-2. **建立應用程式**：名稱「毛豆丸偵探社」、類型「遊戲」、免費。
-3. **App 完整性 → 應用程式簽署**：上傳第一個 aab 後，把頁面上「應用程式簽署金鑰憑證」的 **SHA-256 指紋**複製下來，加進 `assetlinks.json` 的 `sha256_cert_fingerprints` 清單（和 PWABuilder 給的那組並列），再 Push 一次。
-   > 這一步最常被漏掉：Google 會用它自己的金鑰重新簽署 App，沒加這組指紋，網址列就會跑出來。
-4. 需要填的資料：
-   - **隱私權政策網址**：`https://你的帳號.github.io/privacy.html`
-   - **目標對象**：選 6–8 歲、9–12 歲。選了 13 歲以下，就必須符合 Google Play 的「家庭政策」。本遊戲沒有廣告、不蒐集資料，贊助連結有家長驗證，符合這些要求。
-   - **資料安全性**：選「不會收集或分享任何使用者資料」。
-   - **內容分級問卷**：照實填，沒有暴力、沒有使用者互動、沒有購買。
-   - **廣告**：選「沒有廣告」。
-5. **商店資訊**需要的圖：
-   - App 圖示 512×512：`site/icons/play-store-512.png`
-   - 宣傳圖 1024×500：`site/store/feature-graphic-1024x500.jpg`
-   - 手機截圖至少 2 張：在手機上打開網站或 App 直接截圖
-
-### 4. 封閉測試（新帳號必做）
-2023 年 11 月 13 日之後建立的**個人**開發者帳號，正式上架前必須先做封閉測試：
-- 至少 **12 位測試者**加入測試
-- 連續 **14 天**都保持加入
-- 滿足後才能在 Play Console 申請正式版
-
-做法：Play Console → **測試 → 封閉測試** → 建立測試群組，把親友的 Gmail 加進去，把邀請連結傳給他們，請他們按「成為測試人員」並安裝。14 天內不要讓他們退出。
-
-### 5. 之後更新
-- **新篇章、換素材**：只要更新網站（第二節），App 不用重新上架。
-- **改 App 名稱或圖示**：要用 PWABuilder 重新產生 aab（同一個 Package ID、同一把簽章金鑰），版本號加一後上傳。
-
----
-
-## 四、iOS（之後有 Mac 再說）
-
-iPhone、iPad 現在就能用 Safari 打開官網 → 分享 →「加入主畫面」，用起來跟 App 一樣，也能離線玩。
-
-要上 App Store，需要 Mac 和 Apple 開發者帳號。也要注意 Apple 審核規定，只是把網站包起來的 App 可能被退件，所以到時候會需要另外處理。
+《毛豆丸偵探社》的故事、角色、美術、音樂與程式皆屬毛豆丸工作室所有。原始碼公開在這裡是為了架設網站，**不是開放原始碼授權**。歡迎在家裡或教室裡免費使用；未經同意，請勿轉載、改作或用於商業用途。
