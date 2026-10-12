@@ -1,8 +1,8 @@
 {
   "site": {
-    "contactEmail": "請改成你的聯絡信箱",
-    "sponsorUrl": "",
-    "feedbackUrl": "",
+    "contactEmail": "douwanmao@gmail.com",
+    "sponsorUrl": "https://p.ecpay.com.tw/210F4DC",
+    "feedbackUrl": "https://docs.google.com/forms/d/e/1FAIpQLSfv07MZy8hrlDzzZtTITtzLxr5XlGGuTcbDrt2agtVJezxnCQ/viewform?usp=publish-editor",
     "android": {
       "apk": "download/maodouwan.apk",
       "version": "",
