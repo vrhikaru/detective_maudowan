@@ -2,7 +2,7 @@
    - 網站外框（首頁、遊玩頁、圖示）：先用快取，背景更新
    - chapters.json：先連網拿最新的案件清單，沒網路時用快取
    - 遊戲與圖片：第一次打開後存起來，之後沒網路也能玩 */
-const VERSION='mdw-muxphx3r';
+const VERSION='mdw-mv57hpey';
 const SHELL=['./','index.html','play.html','privacy.html','install.html','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png'];
 self.addEventListener('install',e=>{ e.waitUntil(caches.open(VERSION).then(c=>c.addAll(SHELL)).then(()=>self.skipWaiting())); });
 self.addEventListener('activate',e=>{ e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==VERSION).map(k=>caches.delete(k)))).then(()=>self.clients.claim())); });

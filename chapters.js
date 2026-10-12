@@ -1,7 +1,7 @@
 /* 由套版台「發布到網站」自動產生，內容和 chapters.json 一樣，讓直接雙擊打開網頁時也能預覽 */
 window.MDW_CHAPTERS = {
   "site": {
-    "contactEmail": "douwanmao@gmail.com",
+    "contactEmail": "請改成你的聯絡信箱",
     "sponsorUrl": "",
     "feedbackUrl": "",
     "android": {
@@ -29,16 +29,20 @@ window.MDW_CHAPTERS = {
       "ages": "6–10",
       "players": "1～3 人輪流",
       "stamp": "可以辦案",
-      "updated": "2026-10-07"
+      "updated": "2026-10-12"
     },
     {
       "id": "c02",
       "no": 2,
-      "title": "沒有署名的委託信",
-      "status": "soon",
-      "summary": "破案那天傍晚，門縫底下悄悄滑進一封沒有署名的委託信……",
-      "emoji": "✉️",
-      "soonText": "即將推出"
+      "title": "夜市消失的水果",
+      "status": "published",
+      "summary": "鴨叔叔夜市攤子上的熟水果，一個晚上就不見了一大堆！一封沒有署名的燈謎信，把三兄妹帶進夜晚的普雷小鎮。",
+      "emoji": "🏮",
+      "cover": "assets/covers/c02.jpg",
+      "minutes": 30,
+      "ages": "6–10",
+      "players": "1～3 人輪流",
+      "updated": "2026-10-12"
     }
   ]
 };

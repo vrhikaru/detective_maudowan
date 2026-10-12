@@ -21,7 +21,7 @@ a{color:inherit; font-weight:700}
 <h1>隱私權政策</h1>
 <p class="muted">最後更新：2026 年 10 月 7 日</p>
 
-<p>「毛豆丸偵探社」（以下稱本遊戲，包含網站與 Android App）是一款給兒童遊玩的偵探遊戲。我們重視孩子的隱私，以下說明本遊戲如何處理資料。</p>
+<p>「毛豆丸偵探社」（以下稱本遊戲，包含網站與 Android App）是由<b>毛豆丸工作室</b>製作與營運、給兒童遊玩的偵探遊戲。我們重視孩子的隱私，以下說明本遊戲如何處理資料。</p>
 
 <h2>我們不蒐集個人資料</h2>
 <ul>
@@ -46,7 +46,11 @@ a{color:inherit; font-weight:700}
 <p>網站上的「贊助」會連到站外的付款頁面。打開之前必須先通過家長驗證，避免孩子誤觸。站外網頁有各自的隱私權政策。</p>
 
 <h2>聯絡我們</h2>
-<p>對本政策有任何問題，請寫信到：<span class="mail" id="mail">請改成你的聯絡信箱</span></p>
+<p>對本政策有任何問題，請寫信到：<a class="mail" id="mail" href="mailto:douwanmao@gmail.com">douwanmao@gmail.com</a></p>
+  <footer style="margin-top:28px; padding-top:18px; border-top:2px dashed var(--line); color:var(--muted); font-size:13px; line-height:1.7">
+    <div>© <span id="year"></span> 毛豆丸工作室　版權所有</div>
+    <div>《毛豆丸偵探社》的故事、角色、美術、音樂與程式皆屬毛豆丸工作室所有。歡迎在家裡或教室裡免費使用；未經同意，請勿轉載、改作或用於商業用途。</div>
+  </footer>
 </main>
 <script>/* 讀案件清單：放在網站上時讀 chapters.json；直接雙擊打開時瀏覽器不准讀檔，改用 chapters.js */
 async function loadChapters(){
@@ -55,6 +59,7 @@ async function loadChapters(){
   if(window.MDW_CHAPTERS) return window.MDW_CHAPTERS;
   throw new Error('no chapters');
 }
-loadChapters().then(d=>{ if(d.site&&d.site.contactEmail) document.getElementById('mail').textContent=d.site.contactEmail; }).catch(()=>{});</script>
+loadChapters().then(d=>{ const m=d.site&&d.site.contactEmail; if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m||'')){ const e=document.getElementById('mail'); e.textContent=m; e.href='mailto:'+m; } }).catch(()=>{});</script>
+<script>document.getElementById('year').textContent=(()=>{const y=new Date().getFullYear(); return y>2026?`2026–${y}`:'2026';})();</script>
 </body>
 </html>

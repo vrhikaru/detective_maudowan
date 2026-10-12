@@ -74,6 +74,10 @@ ol{margin:12px 0 0; padding-left:1.4em} li{margin:8px 0}
     <p>小孩卡在哪裡、哪裡覺得好玩、哪裡看不懂，都很想知道！這些回饋會直接拿來改遊戲。</p>
     <div id="fbBox"></div>
   </section>
+  <footer style="margin-top:28px; padding-top:18px; border-top:2px dashed var(--line); color:var(--muted); font-size:13px; line-height:1.7">
+    <div>© <span id="year"></span> 毛豆丸工作室　版權所有</div>
+    <div>《毛豆丸偵探社》的故事、角色、美術、音樂與程式皆屬毛豆丸工作室所有。歡迎在家裡或教室裡免費使用；未經同意，請勿轉載、改作或用於商業用途。</div>
+  </footer>
 </main>
 <script>
 /* 讀案件清單：放在網站上時讀 chapters.json；直接雙擊打開時瀏覽器不准讀檔，改用 chapters.js */
@@ -104,10 +108,12 @@ const esc=t=>String(t??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
   }
   const fb=document.getElementById('fbBox'); const parts=[];
   if(site.feedbackUrl) parts.push(`<a class="btn" href="${esc(site.feedbackUrl)}" target="_blank" rel="noopener">💬 到試玩社群分享</a>`);
-  if(site.contactEmail && !/請改成/.test(site.contactEmail)) parts.push(`<p>也可以寫信給我們：<span class="mail">${esc(site.contactEmail)}</span></p>`);
+  const mail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(site.contactEmail||'')?site.contactEmail:'douwanmao@gmail.com';
+  parts.push(`<p>也可以寫信給我們：<a class="mail" href="mailto:${esc(mail)}">${esc(mail)}</a></p>`);
   fb.innerHTML=parts.join('') || '<p class="soon">回饋管道準備中。</p>';
 })();
 if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
+<script>document.getElementById('year').textContent=(()=>{const y=new Date().getFullYear(); return y>2026?`2026–${y}`:'2026';})();</script>
 </body>
 </html>
