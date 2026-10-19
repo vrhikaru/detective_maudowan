@@ -2,8 +2,8 @@
 window.MDW_CHAPTERS = {
   "site": {
     "contactEmail": "請改成你的聯絡信箱",
-    "sponsorUrl": "",
-    "feedbackUrl": "",
+    "sponsorUrl": "https://p.ecpay.com.tw/210F4DC",
+    "feedbackUrl": "https://docs.google.com/forms/d/e/1FAIpQLSfv07MZy8hrlDzzZtTITtzLxr5XlGGuTcbDrt2agtVJezxnCQ/viewform?usp=publish-editor",
     "android": {
       "apk": "download/maodouwan.apk",
       "version": "",
@@ -29,16 +29,33 @@ window.MDW_CHAPTERS = {
       "ages": "6–10",
       "players": "1～3 人輪流",
       "stamp": "可以辦案",
-      "updated": "2026-10-07"
+      "updated": "2026-10-12"
     },
     {
       "id": "c02",
       "no": 2,
-      "title": "沒有署名的委託信",
-      "status": "soon",
-      "summary": "破案那天傍晚，門縫底下悄悄滑進一封沒有署名的委託信……",
-      "emoji": "✉️",
-      "soonText": "即將推出"
+      "title": "夜市消失的水果",
+      "status": "published",
+      "summary": "鴨叔叔夜市攤子上的熟水果，一個晚上就不見了一大堆！一封沒有署名的燈謎信，把三兄妹帶進夜晚的普雷小鎮。",
+      "emoji": "🏮",
+      "cover": "assets/covers/c02.jpg",
+      "minutes": 30,
+      "ages": "6–10",
+      "players": "1～3 人輪流",
+      "updated": "2026-10-12"
+    },
+    {
+      "id": "c03",
+      "no": 3,
+      "title": "提早曝光的生日驚喜",
+      "status": "published",
+      "summary": "為熊熊準備的生日驚喜，竟然在派對前就被熊熊知道了，空屋裡的布置也亂成一團！是誰說出去的？三兄妹要在派對開始前查出真相。",
+      "emoji": "🔍",
+      "cover": "assets/covers/c03.jpg",
+      "minutes": 30,
+      "ages": "6–10",
+      "players": "1～3 人輪流",
+      "updated": "2026-10-18"
     }
   ]
 };
