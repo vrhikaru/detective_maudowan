@@ -1487,6 +1487,7 @@ function renderEnding(){
     ], ()=>{ S.endTalked=true; renderEnding(); });
     return;
   }
+  try{parent!==window&&parent.postMessage({mdw:'solved'},'*')}catch(e){}   // 演到結局：通知官網的遊戲頁記下「已破案」
   showGameChrome(false);
   $main().innerHTML=`<div class="center">
     <div class="panel" style="font-weight:800">🎉 第一案 · 完結<br><span style="font-size:15px;opacity:.8">《誰偷吃了起司蛋糕》</span></div>

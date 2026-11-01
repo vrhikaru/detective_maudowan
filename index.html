@@ -68,7 +68,7 @@ section{padding-block:44px}
 .sec-h p{margin:0; color:var(--muted)}
 
 /* 案件簿：牛皮紙卷宗 */
-.cases{display:grid; gap:26px; grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.cases{display:block}
 .case{position:relative; background:var(--kraft); border-radius:6px 18px 18px 18px; padding:14px; display:flex; flex-direction:column; gap:12px; box-shadow:0 6px 0 rgba(122,78,42,.25); margin-top:18px}
 .case::before{content:attr(data-tab); position:absolute; top:-26px; left:0; background:var(--kraft); color:var(--kraft-ink); font-weight:900; font-size:13px; letter-spacing:.15em; padding:4px 16px 2px; border-radius:12px 12px 0 0}
 .case .cover{position:relative; aspect-ratio:4/3; border-radius:12px; overflow:hidden; background:var(--well); border:3px solid #fffaf0}
@@ -83,6 +83,31 @@ section{padding-block:44px}
 .case.soon .cover{filter:grayscale(.6) brightness(.95)}
 .case.soon .stamp{color:var(--muted); border-color:var(--muted)}
 .case .btn{align-self:flex-start; font-size:16px; padding:10px 18px}
+/* 最新一案：大卷宗（寬螢幕左圖右文） */
+.case.feat{margin-top:18px}
+@media (min-width:760px){ .case.feat{flex-direction:row; align-items:stretch} .case.feat .cover{flex:1.15; aspect-ratio:auto; min-height:280px} .case.feat .sheet{flex:1} }
+.case.feat h3{font-size:clamp(26px,3.4vw,32px)}
+.case .new{display:inline-block; align-self:flex-start; font-size:12px; font-weight:900; letter-spacing:.12em; color:#fff; background:var(--mao); border-radius:8px; padding:1px 9px}
+/* 已破案的印章：蓋在封面上 */
+.solved{position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) rotate(-12deg); font-family:var(--f-display); font-size:clamp(20px,4.5vw,30px); color:var(--stamp); border:4px double var(--stamp); border-radius:12px; padding:2px 14px; background:rgba(255,250,240,.82); white-space:nowrap; pointer-events:none}
+.mini .solved{font-size:17px; border-width:3px; padding:0 8px}
+/* 舊案：小卷宗牆，點開看介紹 */
+.minis-h{display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin:40px 0 4px; font-weight:900; color:var(--kraft-ink)}
+.minis{display:grid; gap:30px 14px; grid-template-columns:repeat(auto-fill,minmax(min(46%,170px),1fr))}
+.mini{position:relative; background:var(--kraft); border:0; border-radius:4px 14px 14px 14px; padding:8px; margin-top:16px; display:flex; flex-direction:column; gap:6px; font:inherit; color:var(--ink); text-align:left; cursor:pointer; box-shadow:0 4px 0 rgba(122,78,42,.25); transition:transform .08s}
+.mini:active{transform:translateY(3px)}
+.mini::before{content:attr(data-tab); position:absolute; top:-20px; left:0; background:var(--kraft); color:var(--kraft-ink); font-weight:900; font-size:11px; letter-spacing:.12em; padding:3px 10px 1px; border-radius:10px 10px 0 0}
+.mini .cover{position:relative; aspect-ratio:4/3; border-radius:9px; overflow:hidden; background:var(--well); border:2px solid #fffaf0}
+.mini .cover img{width:100%; height:100%; object-fit:cover; display:block}
+.mini .cover .ph{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:40px}
+.mini b{font-family:var(--f-display); font-weight:400; font-size:16px; line-height:1.3; padding:2px 4px 4px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+.mini.soon .cover{filter:grayscale(.6) brightness(.95)}
+.mini .lock{position:absolute; top:6px; right:6px; font-size:12px; font-weight:900; background:rgba(255,250,240,.9); border-radius:8px; padding:0 7px; color:var(--muted)}
+.more{display:flex; justify-content:center; margin-top:22px}
+.more .btn{font-size:16px; padding:10px 20px}
+dialog.casedlg{max-width:min(94vw,440px); padding:16px}
+dialog.casedlg .case{margin-top:24px; box-shadow:none}
+dialog.casedlg .x{position:absolute; top:10px; right:12px; font:inherit; font-size:22px; font-weight:900; background:none; border:0; color:var(--ink); cursor:pointer; padding:4px 8px}
 .empty{color:var(--muted)}
 [hidden]{display:none !important}
 
@@ -220,6 +245,7 @@ dialog .go-link{display:none; word-break:break-all}
   </div>
 </footer>
 
+<dialog id="caseDlg" class="casedlg" aria-label="案件介紹"><button class="x" id="caseDlgX" aria-label="關閉">✕</button><div id="caseDlgBody"></div></dialog>
 <dialog id="gate" aria-labelledby="gateTitle">
   <form method="dialog" id="gateForm">
     <h3 id="gateTitle">請家長協助</h3>
@@ -265,22 +291,60 @@ async function loadContent(){
   const list=(data.chapters||[]).slice().sort((a,b)=>a.no-b.no);
   const first=list.find(c=>c.status==='published');
   if(first) $('startBtn').href=`play.html?c=${encodeURIComponent(first.id)}`;
-  $('caseList').innerHTML = list.length ? list.map(c=>{
-    const pub=c.status==='published';
-    const tags=[c.minutes?`約 ${c.minutes} 分鐘`:'', c.ages?`${c.ages} 歲`:'', c.players?`${c.players}`:''].filter(Boolean);
-    return `<article class="case ${pub?'':'soon'}" data-tab="CASE ${String(c.no).padStart(2,'0')}">
-      <div class="cover">${c.cover?`<img src="${esc(c.cover)}" alt="" loading="lazy" onerror="this.remove()">`:''}<div class="ph" aria-hidden="true">${esc(c.emoji||'🔍')}</div></div>
-      <span class="stamp">${pub?(c.stamp||'可以辦案'):'調查中'}</span>
-      <div class="sheet">
-        <h3>${esc(c.title)}</h3>
-        <p class="sum">${esc(c.summary||'')}</p>
-        ${tags.length?`<div class="tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
-        ${pub?`<a class="btn go" href="play.html?c=${encodeURIComponent(c.id)}">🔍 開始辦案</a>`:`<span class="btn" aria-disabled="true">🔒 ${esc(c.soonText||'即將推出')}</span>`}
-      </div></article>`;
-  }).join('') : '<p class="empty">案件簿還是空的。</p>';
-  // 封面圖載入後蓋掉 emoji
-  document.querySelectorAll('.case .cover img').forEach(img=>{ const done=()=>{ if(img.naturalWidth) img.nextElementSibling?.remove(); }; img.complete?done():img.addEventListener('load',done); });
+  CHAPTERS=list; renderCases();
 }
+/* 案件簿：最上面一張大卷宗放最新一案，其他案件排成小卷宗牆（新的在前），點開看介紹。
+   破過的案件（遊戲結局時遊戲頁會記在這台裝置上）蓋「已破案」章 */
+let CHAPTERS=[], SHOW_ALL=false;
+function solvedMap(){ try{ return JSON.parse(localStorage.getItem('mdw-solved')||'{}')||{}; }catch(e){ return {}; } }
+function coverHTML(c, solved){ return `<div class="cover">${c.cover?`<img src="${esc(c.cover)}" alt="" loading="lazy" onerror="this.remove()">`:''}<div class="ph" aria-hidden="true">${esc(c.emoji||'🔍')}</div>${solved?'<span class="solved">已破案</span>':''}</div>`; }
+function caseCard(c, solved, cls){
+  const pub=c.status==='published';
+  const tags=[c.minutes?`約 ${c.minutes} 分鐘`:'', c.ages?`${c.ages} 歲`:'', c.players?`${c.players}`:''].filter(Boolean);
+  return `<article class="case ${pub?'':'soon'} ${cls||''}" data-tab="CASE ${String(c.no).padStart(2,'0')}">
+    ${coverHTML(c, solved)}
+    ${solved?'':`<span class="stamp">${pub?(c.stamp||'可以辦案'):'調查中'}</span>`}
+    <div class="sheet">
+      ${cls==='feat'&&pub?'<span class="new">最新案件</span>':''}
+      <h3>${esc(c.title)}</h3>
+      <p class="sum">${esc(c.summary||'')}</p>
+      ${tags.length?`<div class="tags">${tags.map(t=>`<span>${esc(t)}</span>`).join('')}</div>`:''}
+      ${pub?`<a class="btn go" href="play.html?c=${encodeURIComponent(c.id)}">🔍 ${solved?'再辦一次':'開始辦案'}</a>`:`<span class="btn" aria-disabled="true">🔒 ${esc(c.soonText||'即將推出')}</span>`}
+    </div></article>`;
+}
+function hideEmoji(root){ root.querySelectorAll('.cover img').forEach(img=>{ const done=()=>{ if(img.naturalWidth) img.parentNode.querySelector('.ph')?.remove(); }; img.complete?done():img.addEventListener('load',done); }); }
+function renderCases(){
+  const list=CHAPTERS, box=$('caseList');
+  if(!list.length){ box.innerHTML='<p class="empty">案件簿還是空的。</p>'; return; }
+  const sv=solvedMap(), pubs=list.filter(c=>c.status==='published');
+  const feat=pubs[pubs.length-1]||list[list.length-1];
+  const rest=list.filter(c=>c!==feat).sort((a,b)=>b.no-a.no);
+  box.innerHTML = caseCard(feat, !!sv[feat.id], 'feat') + (rest.length ? `
+    <div class="minis-h"><span>其他案件</span><small>${pubs.filter(c=>sv[c.id]).length} / ${pubs.length} 案已破案</small></div>
+    <div class="minis">${rest.map(c=>{ const pub=c.status==='published';
+      return `<button class="mini ${pub?'':'soon'}" data-id="${esc(c.id)}" data-tab="CASE ${String(c.no).padStart(2,'0')}" aria-label="第 ${c.no} 案：${esc(c.title)}${sv[c.id]?'（已破案）':''}">
+        ${coverHTML(c, !!sv[c.id])}${pub?'':'<span class="lock">調查中</span>'}<b>${esc(c.title)}</b></button>`; }).join('')}</div>
+    <div class="more" hidden><button class="btn" id="moreBtn"></button></div>` : '');
+  hideEmoji(box); fitMinis();
+  box.querySelectorAll('.mini').forEach(b=>b.onclick=()=>{ const c=CHAPTERS.find(x=>x.id===b.dataset.id); if(!c) return;
+    $('caseDlgBody').innerHTML=caseCard(c, !!solvedMap()[c.id]); hideEmoji($('caseDlgBody')); $('caseDlg').showModal(); });
+  const mb=$('moreBtn'); if(mb) mb.onclick=()=>{ SHOW_ALL=!SHOW_ALL; fitMinis(); if(!SHOW_ALL) $('cases').scrollIntoView(); };
+}
+/* 沒展開時只露出剛好排滿的幾列（手機 2 欄 × 3 列、寬螢幕 2 列），其他收在「看全部」裡 */
+function fitMinis(){
+  const g=document.querySelector('.minis'); if(!g) return;
+  const cards=[...g.children], cols=Math.max(1,getComputedStyle(g).gridTemplateColumns.split(' ').filter(Boolean).length);
+  const n=cols*(cols>=4?2:3), extra=cards.length>n;
+  cards.forEach((c,i)=>c.hidden=!SHOW_ALL&&i>=n);
+  const more=document.querySelector('.more'); more.hidden=!extra;
+  $('moreBtn').textContent=SHOW_ALL?'收起 ▴':`看全部 ${CHAPTERS.length} 案 ▾`;
+}
+addEventListener('resize',()=>{ clearTimeout(fitMinis._t); fitMinis._t=setTimeout(fitMinis,150); });
+$('caseDlgX').onclick=()=>$('caseDlg').close();
+$('caseDlg').addEventListener('click',e=>{ if(e.target===$('caseDlg')) $('caseDlg').close(); });
+// 從遊戲頁回來（或別的分頁破了案）就重新蓋章
+addEventListener('pageshow',()=>{ if(CHAPTERS.length) renderCases(); });
+addEventListener('storage',e=>{ if(e.key==='mdw-solved' && CHAPTERS.length) renderCases(); });
 loadContent();
 
 /* 家長驗證：打開站外連結前先回答一題乘法 */

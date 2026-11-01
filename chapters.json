@@ -68,6 +68,19 @@
       "ages": "6–10",
       "players": "1～3 人輪流",
       "updated": "2026-10-24"
+    },
+    {
+      "id": "c05",
+      "no": 5,
+      "title": "海邊的瓶中信",
+      "status": "published",
+      "summary": "跳跳在海邊撿到一個瓶子，裡面的地圖上寫著 S.O.S！這是海盜的藏寶圖，還是有人在求救？三兄妹照著地圖出發，海灘盡頭藏著一個今晚就得解決的秘密。",
+      "emoji": "🍾",
+      "cover": "assets/covers/c05.jpg",
+      "minutes": 30,
+      "ages": "6–10",
+      "players": "1～3 人輪流",
+      "updated": "2026-11-01"
     }
   ]
 }

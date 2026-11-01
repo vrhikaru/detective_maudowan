@@ -579,6 +579,7 @@ function renderChrome(){
 function go(i){
   cleanup&&cleanup();cleanup=null;setHelp(null);note('');S.i=i;renderChrome();
   const st=CASE.stages[i];playBgm(st.bgm);
+  if(i===CASE.stages.length-1)try{parent!==window&&parent.postMessage({mdw:'solved'},'*')}catch(e){}   // 演到結局：通知官網的遊戲頁記下「已破案」
   const start=()=>{stageEl.innerHTML='';const r=BLOCKS[st.type](stageEl,st);cleanup=typeof r==='function'?r:null};
   stageEl.innerHTML='';
   const intro=()=>st.howto?howto(st,start):start();

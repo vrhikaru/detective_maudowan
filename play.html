@@ -43,6 +43,9 @@ async function loadChapters(){
   const f=document.createElement('iframe');
   f.title=ch?ch.title:'遊戲'; f.allow='autoplay; fullscreen'; f.src=`play/${id}/index.html`;
   f.onload=()=>msg.remove();
+  // 遊戲演到結局時會送 {mdw:'solved'} 過來：記在這台裝置上，案件簿就會蓋「已破案」章
+  addEventListener('message',e=>{ if(e.source!==f.contentWindow || !e.data || e.data.mdw!=='solved') return;
+    try{ const m=JSON.parse(localStorage.getItem('mdw-solved')||'{}')||{}; if(!m[id]){ m[id]=new Date().toISOString().slice(0,10); localStorage.setItem('mdw-solved', JSON.stringify(m)); } }catch(err){} });
   document.getElementById('stage').appendChild(f);
   setTimeout(()=>{ if(msg.isConnected) msg.textContent='讀取有點久……第一次打開要下載圖片和音樂，請稍等。'; }, 6000);
 })();
